@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
+import { ModalFooter } from '../components/ModalFooter';
 import { Input, Select, Textarea, AmountInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -462,8 +463,20 @@ export function LoanDetails() {
         <FAB onClick={() => setIsModalOpen(true)} />
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Record Transaction">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Record Transaction"
+        footer={
+          <ModalFooter
+            formId="record-transaction-form"
+            onCancel={() => setIsModalOpen(false)}
+            submitLabel="Record Payment"
+            isSubmitting={isSubmitting}
+          />
+        }
+      >
+        <form id="record-transaction-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
               label="Transaction Type *"
@@ -516,28 +529,23 @@ export function LoanDetails() {
             {...register('remarks')} 
             error={errors.remarks?.message} 
           />
-          
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Saving...' : 'Record Payment'}
-            </button>
-          </div>
         </form>
       </Modal>
 
-      <Modal isOpen={isRateModalOpen} onClose={() => setIsRateModalOpen(false)} title="Update Interest Rate">
-        <form onSubmit={handleRateSubmit(onRateSubmit)} className="space-y-4">
+      <Modal
+        isOpen={isRateModalOpen}
+        onClose={() => setIsRateModalOpen(false)}
+        title="Update Interest Rate"
+        footer={
+          <ModalFooter
+            formId="update-rate-form"
+            onCancel={() => setIsRateModalOpen(false)}
+            submitLabel="Update Rate"
+            isSubmitting={isRateSubmitting}
+          />
+        }
+      >
+        <form id="update-rate-form" onSubmit={handleRateSubmit(onRateSubmit)} className="space-y-4">
           <Select
             label="Rate Calculation *"
             options={[
@@ -566,27 +574,23 @@ export function LoanDetails() {
             {...registerRate('effectiveDate')} 
             error={rateErrors.effectiveDate?.message as string} 
           />
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setIsRateModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={isRateSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isRateSubmitting ? 'Saving...' : 'Update Rate'}
-            </button>
-          </div>
         </form>
       </Modal>
 
-      <Modal isOpen={isForecloseModalOpen} onClose={() => setIsForecloseModalOpen(false)} title="Confirm Foreclosure">
-        <form onSubmit={handleForeclose} className="space-y-4">
+      <Modal
+        isOpen={isForecloseModalOpen}
+        onClose={() => setIsForecloseModalOpen(false)}
+        title="Confirm Foreclosure"
+        footer={
+          <ModalFooter
+            formId="foreclose-form"
+            onCancel={() => setIsForecloseModalOpen(false)}
+            submitLabel="Confirm Closure"
+            variant="destructive"
+          />
+        }
+      >
+        <form id="foreclose-form" onSubmit={handleForeclose} className="space-y-4">
           <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 border border-red-100 dark:border-red-900/50">
             <h4 className="text-red-800 dark:text-red-400 font-semibold mb-2">Final Settlement</h4>
             <div className="flex justify-between text-sm mb-1 text-red-700/80 dark:text-red-400/80">
@@ -609,27 +613,23 @@ export function LoanDetails() {
             onChange={(e) => setForecloseNotes(e.target.value)}
             placeholder="e.g. Settled in cash, discount applied..."
           />
-
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setIsForecloseModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              className="px-4 py-2 text-sm font-medium rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Confirm Closure
-            </button>
-          </div>
         </form>
       </Modal>
 
-      <Modal isOpen={isDatesModalOpen} onClose={() => setIsDatesModalOpen(false)} title="Update Loan Dates">
-        <form onSubmit={handleDatesSubmit(onDatesSubmit)} className="space-y-4">
+      <Modal
+        isOpen={isDatesModalOpen}
+        onClose={() => setIsDatesModalOpen(false)}
+        title="Update Loan Dates"
+        footer={
+          <ModalFooter
+            formId="update-dates-form"
+            onCancel={() => setIsDatesModalOpen(false)}
+            submitLabel="Update Dates"
+            isSubmitting={isDatesSubmitting}
+          />
+        }
+      >
+        <form id="update-dates-form" onSubmit={handleDatesSubmit(onDatesSubmit)} className="space-y-4">
           <Input 
             label="Start Date *" 
             type="date"
@@ -642,27 +642,23 @@ export function LoanDetails() {
             {...registerDates('dueDate')} 
             error={datesErrors.dueDate?.message as string} 
           />
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setIsDatesModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={isDatesSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isDatesSubmitting ? 'Saving...' : 'Update Dates'}
-            </button>
-          </div>
         </form>
       </Modal>
 
-      <Modal isOpen={!!editingTx} onClose={() => setEditingTx(null)} title="Edit Transaction">
-        <form onSubmit={handleEditTxSubmit(onEditTxSubmit)} className="space-y-4">
+      <Modal
+        isOpen={!!editingTx}
+        onClose={() => setEditingTx(null)}
+        title="Edit Transaction"
+        footer={
+          <ModalFooter
+            formId="edit-transaction-form"
+            onCancel={() => setEditingTx(null)}
+            submitLabel="Update Transaction"
+            isSubmitting={isEditTxSubmitting}
+          />
+        }
+      >
+        <form id="edit-transaction-form" onSubmit={handleEditTxSubmit(onEditTxSubmit)} className="space-y-4">
           <Select
             label="Transaction Type *"
             options={[
@@ -691,22 +687,6 @@ export function LoanDetails() {
                 {numberToWords(editTxAmount)}
               </p>
             )}
-          </div>
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setEditingTx(null)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={isEditTxSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isEditTxSubmitting ? 'Saving...' : 'Update Transaction'}
-            </button>
           </div>
         </form>
       </Modal>

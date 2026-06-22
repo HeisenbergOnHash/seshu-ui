@@ -46,14 +46,14 @@ export function TopBar() {
 
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity md:hidden"
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity md:hidden"
           onClick={closeSidebar}
         />
       )}
 
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs bg-background border-r shadow-xl transition-transform duration-300 ease-in-out transform md:hidden',
+          'fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs glass-panel border-r transition-transform duration-300 ease-in-out transform md:hidden',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >

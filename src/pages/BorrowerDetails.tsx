@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
+import { ModalFooter } from '../components/ModalFooter';
 import { Input, Select, AmountInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -148,8 +149,20 @@ export function BorrowerDetails() {
 
       <FAB onClick={() => setIsModalOpen(true)} />
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="New Loan">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="New Loan"
+        footer={
+          <ModalFooter
+            formId="new-loan-form"
+            onCancel={() => setIsModalOpen(false)}
+            submitLabel="Create Loan"
+            isSubmitting={isSubmitting}
+          />
+        }
+      >
+        <form id="new-loan-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <AmountInput
               label="Principal Amount *"
@@ -209,23 +222,6 @@ export function BorrowerDetails() {
               {...register('dueDate')} 
               error={errors.dueDate?.message} 
             />
-          </div>
-          
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button 
-              type="button" 
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Saving...' : 'Create Loan'}
-            </button>
           </div>
         </form>
       </Modal>

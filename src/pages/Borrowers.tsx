@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
+import { ModalFooter } from '../components/ModalFooter';
 import { Input, Textarea } from '../components/FormInputs';
 import {
   Phone,
@@ -351,8 +352,20 @@ export function Borrowers() {
 
       <FAB onClick={() => setIsModalOpen(true)} />
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add Borrower">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Add Borrower"
+        footer={
+          <ModalFooter
+            formId="add-borrower-form"
+            onCancel={() => setIsModalOpen(false)}
+            submitLabel="Save Borrower"
+            isSubmitting={isSubmitting}
+          />
+        }
+      >
+        <form id="add-borrower-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
             label="Full Name *"
             {...register('name')}
@@ -387,22 +400,6 @@ export function Borrowers() {
             {...register('notes')}
             error={errors.notes?.message}
           />
-          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-medium rounded-md hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Borrower'}
-            </button>
-          </div>
         </form>
       </Modal>
     </div>

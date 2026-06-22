@@ -243,4 +243,66 @@
     @apply rounded-2xl border border-border/60 bg-card shadow-sm transition-all duration-200;
     @apply active:scale-[0.99] hover:border-primary/25 hover:shadow-md;
   }
+
+  .modal-overlay {
+    @apply fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4;
+    overscroll-behavior: none;
+  }
+
+  .modal-backdrop {
+    @apply absolute inset-0 bg-black/40 backdrop-blur-sm;
+    animation: fade-in 0.5s ease-out both;
+  }
+
+  .modal-sheet {
+    @apply relative w-full max-w-lg flex flex-col rounded-t-3xl sm:rounded-2xl;
+    @apply max-h-[min(90dvh,100%)] sm:max-h-[min(85vh,100%)];
+    @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-xl;
+    overscroll-behavior: contain;
+    animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (min-width: 640px) {
+    .modal-sheet {
+      animation: scale-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+  }
+
+  .modal-handle {
+    @apply mx-auto mt-3 mb-1 h-1 w-10 shrink-0 rounded-full bg-muted-foreground/30 sm:hidden;
+  }
+
+  .modal-header {
+    @apply flex shrink-0 items-center justify-between px-4 pt-2 pb-3 sm:px-6 sm:pt-6 sm:pb-4;
+  }
+
+  .modal-body {
+    @apply flex-1 min-h-0 overflow-y-auto overscroll-y-contain px-4 sm:px-6;
+    scrollbar-gutter: stable;
+    scroll-padding-bottom: 1rem;
+  }
+
+  .modal-footer {
+    @apply shrink-0 border-t border-border/50 bg-card/95 backdrop-blur-sm px-4 pt-3 sm:px-6;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .modal-footer-actions {
+    @apply flex flex-col-reverse gap-2 sm:flex-row sm:justify-end;
+  }
+
+  .btn-modal-secondary {
+    @apply inline-flex min-h-11 w-full sm:w-auto items-center justify-center rounded-2xl border border-border bg-background px-5 text-sm font-medium text-foreground transition-colors duration-200;
+    @apply hover:bg-muted active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none;
+  }
+
+  .btn-modal-primary {
+    @apply inline-flex min-h-11 w-full sm:w-auto items-center justify-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-200;
+    @apply hover:bg-primary/90 active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none;
+  }
+
+  .btn-modal-destructive {
+    @apply inline-flex min-h-11 w-full sm:w-auto items-center justify-center rounded-2xl bg-destructive px-5 text-sm font-semibold text-destructive-foreground transition-all duration-200;
+    @apply hover:bg-destructive/90 active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none;
+  }
 }
