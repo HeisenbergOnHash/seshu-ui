@@ -21,8 +21,12 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      <div className="flex min-h-dvh flex-col items-center justify-center mesh-bg gap-3 animate-fade-in">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
+          <span className="text-xl font-bold">₹</span>
+          <span className="absolute inset-0 rounded-2xl border-2 border-primary/40 animate-ping" />
+        </div>
+        <p className="text-sm text-muted-foreground">Loading…</p>
       </div>
     );
   }

@@ -31,7 +31,7 @@ export function Wallet() {
     <div className="space-y-6">
       <h2 className="text-xl font-bold tracking-tight">Wallet</h2>
       
-      <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-lg relative overflow-hidden">
+      <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6 shadow-xl shadow-primary/20 relative overflow-hidden transition-transform duration-300 hover:scale-[1.01]">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 rounded-full bg-white/10 blur-2xl"></div>
         <div className="relative z-10">
           <div className="text-primary-foreground/80 text-sm font-medium mb-1">Available Cash</div>

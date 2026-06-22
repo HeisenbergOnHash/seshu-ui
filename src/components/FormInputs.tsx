@@ -1,7 +1,7 @@
 import React from 'react';
 
 const inputClassName =
-  'flex h-11 md:h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors';
+  'flex h-11 md:h-10 w-full rounded-xl border border-input/80 bg-background/80 px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:shadow-md';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

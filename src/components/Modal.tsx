@@ -25,23 +25,23 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
       <div
         className={cn(
-          'relative w-full max-w-lg max-h-[85dvh] flex flex-col rounded-t-2xl sm:rounded-xl border bg-card p-4 sm:p-6 shadow-lg animate-in fade-in zoom-in-95 pb-safe',
-          'sm:max-h-[85vh] sm:mb-0',
+          'relative w-full max-w-lg max-h-[85dvh] flex flex-col glass-panel rounded-t-3xl sm:rounded-2xl p-4 sm:p-6 pb-safe animate-slide-up sm:animate-scale-in',
+          'sm:max-h-[85vh]',
           className
         )}
       >
         <div className="flex items-center justify-between mb-4 shrink-0">
-          <h2 className="text-xl font-bold tracking-tight">{title}</h2>
+          <h2 className="text-lg font-bold tracking-tight">{title}</h2>
           <button
             onClick={onClose}
-            className="touch-target rounded-full hover:bg-muted transition-colors shrink-0"
+            className="touch-target rounded-full hover:bg-muted/80 transition-colors duration-200 shrink-0"
             aria-label="Close modal"
           >
             <X className="h-5 w-5" />

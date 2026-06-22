@@ -15,7 +15,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="hidden md:flex fixed inset-y-0 left-0 z-40 w-60 flex-col border-r bg-background">
+    <aside className="hidden md:flex fixed inset-y-0 left-0 z-40 w-60 flex-col border-r border-border/50 bg-background/90 backdrop-blur-xl">
       <div className="flex h-14 items-center border-b px-4">
         <h1 className="text-lg font-semibold tracking-tight">FinManager</h1>
       </div>

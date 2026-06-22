@@ -42,28 +42,28 @@ export function Home() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Stat Cards */}
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="stat-card">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <Wallet className="h-4 w-4" />
             <span>Principal</span>
           </div>
           <div className="text-xl font-bold">₹{stats.totalPrincipal.toLocaleString()}</div>
         </div>
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="stat-card">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <TrendingUp className="h-4 w-4 text-green-500" />
             <span>Interest</span>
           </div>
           <div className="text-xl font-bold text-green-500">₹{stats.interestEarned.toLocaleString()}</div>
         </div>
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="stat-card">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <Activity className="h-4 w-4" />
             <span>Collections</span>
           </div>
           <div className="text-xl font-bold">₹{stats.totalCollections.toLocaleString()}</div>
         </div>
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
+        <div className="stat-card">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <Users className="h-4 w-4" />
             <span>Active Loans</span>
@@ -72,7 +72,7 @@ export function Home() {
         </div>
       </div>
 
-      <div className="rounded-xl border bg-card p-4 shadow-sm">
+      <div className="stat-card">
         <h3 className="text-lg font-semibold mb-4">Monthly Collections</h3>
         <div className="h-64 lg:h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">

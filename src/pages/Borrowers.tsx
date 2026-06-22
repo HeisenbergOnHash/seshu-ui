@@ -233,7 +233,7 @@ export function Borrowers() {
 
             return (
               <Link key={b.id} to={`/borrowers/${b.id}`} className="block group">
-                <div className="rounded-xl border bg-card shadow-sm overflow-hidden hover:border-primary/40 hover:shadow-md transition-all">
+                <div className="rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden list-card hover:border-primary/40 hover:shadow-md transition-all">
                   <div className="p-4 flex gap-3">
                     {/* Avatar */}
                     <div className={`shrink-0 h-12 w-12 rounded-full flex items-center justify-center text-sm font-bold ${

@@ -21,7 +21,7 @@ export function TopBar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b bg-background px-4 pt-safe">
+      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border/50 bg-background/80 backdrop-blur-xl px-4 pt-safe">
         <div className="flex items-center gap-2">
           <button
             className="touch-target -ml-2 text-foreground md:hidden"
