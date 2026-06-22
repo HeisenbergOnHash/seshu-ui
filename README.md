@@ -5,6 +5,8 @@ Frontend for the Seshu loan management app.
 - **Production:** https://seshu.pages.dev
 - **Backend API:** https://seshu-backend.onrender.com/api
 
+Production avoids CORS by calling same-origin `/api`, which Cloudflare Pages proxies to Render (see [`public/_redirects`](public/_redirects)).
+
 ## Run locally
 
 1. Install dependencies:
@@ -35,7 +37,12 @@ VITE_API_URL=https://seshu-backend.onrender.com/api
 
 ## Deploy (Cloudflare Pages)
 
-Production builds use [`.env.production`](.env.production), which points at the Render backend.
+Production builds use relative `/api` requests. [`public/_redirects`](public/_redirects) proxies them to Render, so the browser never makes cross-origin API calls.
+
+```txt
+/api/*  https://seshu-backend.onrender.com/api/:splat  200
+/*      /index.html  200
+```
 
 Cloudflare Pages settings:
 
@@ -43,9 +50,8 @@ Cloudflare Pages settings:
 |---------|-------|
 | Build command | `npm run build` |
 | Build output directory | `dist` |
-| Environment variable (optional override) | `VITE_API_URL=https://seshu-backend.onrender.com/api` |
 
-SPA routing is handled via [`public/_redirects`](public/_redirects).
+Do **not** set `VITE_API_URL` in Cloudflare unless you intentionally want direct cross-origin calls (backend must allow your origin via `CORS_ORIGINS`).
 
 ## API URL format
 
