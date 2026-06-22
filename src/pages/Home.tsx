@@ -36,11 +36,11 @@ export function Home() {
     fetchStats();
   }, []);
 
-  if (!stats) return <div className="p-4">Loading...</div>;
+  if (!stats) return <div className="text-muted-foreground py-8 text-center">Loading...</div>;
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Stat Cards */}
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -74,7 +74,7 @@ export function Home() {
 
       <div className="rounded-xl border bg-card p-4 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">Monthly Collections</h3>
-        <div className="h-64 w-full">
+        <div className="h-64 lg:h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={mockChartData}>
               <defs>

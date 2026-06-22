@@ -1,5 +1,8 @@
 import React from 'react';
 
+const inputClassName =
+  'flex h-11 md:h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors';
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
@@ -12,7 +15,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <label className="text-sm font-medium leading-none text-foreground">{label}</label>
         <input
           ref={ref}
-          className={`flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors ${className || ''}`}
+          className={`${inputClassName} ${className || ''}`}
           {...props}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
@@ -35,7 +38,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <label className="text-sm font-medium leading-none text-foreground">{label}</label>
         <select
           ref={ref}
-          className={`flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors ${className || ''}`}
+          className={`${inputClassName} ${className || ''}`}
           {...props}
         >
           <option value="" disabled>Select an option</option>
@@ -64,7 +67,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         <label className="text-sm font-medium leading-none text-foreground">{label}</label>
         <textarea
           ref={ref}
-          className={`flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors ${className || ''}`}
+          className={`flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition-colors ${className || ''}`}
           {...props}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}

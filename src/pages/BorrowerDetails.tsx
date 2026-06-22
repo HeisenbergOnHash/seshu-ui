@@ -7,7 +7,7 @@ import { Input, Select } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { IndianRupee, Calendar } from 'lucide-react';
+import { IndianRupee, Calendar, ChevronLeft } from 'lucide-react';
 import dayjs from 'dayjs';
 import { numberToWords } from '../lib/numberToWords';
 
@@ -86,11 +86,19 @@ export function BorrowerDetails() {
     }
   };
 
-  if (loading) return <div className="p-4 text-muted-foreground">Loading...</div>;
-  if (!borrower) return <div className="p-4 text-destructive">Borrower not found</div>;
+  if (loading) return <div className="text-muted-foreground py-8 text-center">Loading...</div>;
+  if (!borrower) return <div className="text-destructive py-8 text-center">Borrower not found</div>;
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6 content-pb-fab">
+      <Link
+        to="/borrowers"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back to Borrowers
+      </Link>
+
       <div className="rounded-xl border bg-card p-4 shadow-sm">
         <div className="flex justify-between items-start mb-2">
           <h2 className="text-2xl font-bold tracking-tight">{borrower.name}</h2>
@@ -155,7 +163,7 @@ export function BorrowerDetails() {
               </p>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
               label="Rate Calculation *"
               options={[
@@ -190,7 +198,7 @@ export function BorrowerDetails() {
             {...register('interestType')}
             error={errors.interestType?.message}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input 
               label="Start Date *" 
               type="date"
@@ -205,7 +213,7 @@ export function BorrowerDetails() {
             />
           </div>
           
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setIsModalOpen(false)}

@@ -61,17 +61,17 @@ export function Reports() {
   ];
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold tracking-tight">Reports & Exports</h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 p-4 bg-muted/30 rounded-xl border border-border/50">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-muted/30 rounded-xl border border-border/50">
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1 block">Start Date</label>
           <input 
             type="date" 
-            className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full h-11 md:h-10 rounded-md border border-input bg-background px-3 py-1 text-base md:text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
@@ -80,7 +80,7 @@ export function Reports() {
           <label className="text-xs font-medium text-muted-foreground mb-1 block">End Date</label>
           <input 
             type="date" 
-            className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full h-11 md:h-10 rounded-md border border-input bg-background px-3 py-1 text-base md:text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
@@ -102,7 +102,8 @@ export function Reports() {
             <button
               onClick={() => handleExport(report.id)}
               disabled={loading}
-              className="p-2 hover:bg-muted rounded-full transition-colors"
+              className="touch-target hover:bg-muted rounded-full transition-colors disabled:opacity-50"
+              aria-label={`Download ${report.title}`}
             >
               <Download className="h-5 w-5 text-muted-foreground" />
             </button>

@@ -170,12 +170,12 @@ export function Borrowers() {
   }, [filteredBorrowers]);
 
   return (
-    <div className="p-4 space-y-4 pb-24">
+    <div className="space-y-4 content-pb-fab">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-xl font-bold tracking-tight">Borrowers</h2>
         <button
           onClick={() => setShowInactive(!showInactive)}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 bg-muted/50 px-2.5 py-1.5 rounded-lg border border-border/50 shrink-0"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 bg-muted/50 px-3 py-2 rounded-lg border border-border/50 shrink-0 min-h-11"
         >
           {showInactive ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
           {showInactive ? 'Hide Inactive' : 'Show Inactive'}
@@ -183,7 +183,7 @@ export function Borrowers() {
       </div>
 
       {/* Portfolio summary */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         <div className="rounded-xl border bg-card p-3 shadow-sm">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
             <User className="h-3.5 w-3.5" />
@@ -217,7 +217,7 @@ export function Borrowers() {
           placeholder="Search name, phone, ID, address..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors"
+          className="w-full pl-9 pr-3 py-2.5 text-base md:text-sm rounded-xl border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors h-11 md:h-10"
         />
       </div>
 
@@ -259,8 +259,9 @@ export function Borrowers() {
                         <div className="flex items-center gap-1 shrink-0">
                           <button
                             onClick={e => handleToggleStatus(e, b.id, !b.isActive)}
-                            className="opacity-0 group-hover:opacity-100 p-1.5 text-muted-foreground hover:text-primary transition-all rounded-md hover:bg-muted"
+                            className="touch-target text-muted-foreground hover:text-primary transition-all rounded-md hover:bg-muted"
                             title={b.isActive ? 'Archive borrower' : 'Restore borrower'}
+                            aria-label={b.isActive ? 'Archive borrower' : 'Restore borrower'}
                           >
                             {b.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                           </button>
@@ -291,34 +292,34 @@ export function Borrowers() {
                   </div>
 
                   {/* Loan stats strip */}
-                  <div className="grid grid-cols-3 divide-x border-t bg-muted/30 text-center">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 divide-x border-t bg-muted/30 text-center">
                     <div className="px-2 py-2.5">
-                      <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Loans</div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Loans</div>
                       <div className="text-sm font-bold mt-0.5">
                         {stats.activeCount}
                         <span className="text-muted-foreground font-normal text-xs"> / {stats.totalLoans}</span>
                       </div>
-                      <div className="text-[10px] text-muted-foreground">active / total</div>
+                      <div className="text-xs text-muted-foreground">active / total</div>
                     </div>
                     <div className="px-2 py-2.5">
-                      <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Principal</div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Principal</div>
                       <div className="text-sm font-bold mt-0.5 text-primary">
                         {stats.activePrincipal > 0 ? `₹${formatAmount(stats.activePrincipal)}` : '—'}
                       </div>
-                      <div className="text-[10px] text-muted-foreground">active exposure</div>
+                      <div className="text-xs text-muted-foreground">active exposure</div>
                     </div>
                     <div className="px-2 py-2.5">
-                      <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Rate</div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Rate</div>
                       <div className="text-xs font-semibold mt-0.5 truncate px-1">
                         {rateLabel ?? '—'}
                       </div>
                       {stats.latestActive?.dueDate && (
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="text-xs text-muted-foreground">
                           Due {dayjs(stats.latestActive.dueDate).format('MMM D')}
                         </div>
                       )}
                       {!stats.latestActive?.dueDate && stats.latestActive && (
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="text-xs text-muted-foreground">
                           Since {dayjs(stats.latestActive.startDate).format('MMM D')}
                         </div>
                       )}
@@ -331,7 +332,7 @@ export function Borrowers() {
                     </div>
                   )}
 
-                  <div className="px-4 py-2 border-t flex items-center justify-between text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="px-4 py-2 border-t flex items-center justify-between text-xs text-primary font-medium">
                     <span>View loans & details</span>
                     <ChevronRight className="h-4 w-4" />
                   </div>
@@ -384,7 +385,7 @@ export function Borrowers() {
             {...register('notes')}
             error={errors.notes?.message}
           />
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
@@ -7,7 +7,7 @@ import { Input, Select, Textarea } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { IndianRupee, ArrowDownRight, ArrowUpRight, Percent, Calendar, Edit2 } from 'lucide-react';
+import { IndianRupee, ArrowDownRight, ArrowUpRight, Percent, Calendar, Edit2, ChevronLeft } from 'lucide-react';
 import dayjs from 'dayjs';
 import { numberToWords } from '../lib/numberToWords';
 
@@ -55,6 +55,7 @@ interface Loan {
   startDate: string;
   dueDate?: string;
   borrower: {
+    id: string;
     name: string;
   };
   transactions: Transaction[];
@@ -233,8 +234,8 @@ export function LoanDetails() {
     }
   };
 
-  if (loading) return <div className="p-4 text-muted-foreground">Loading...</div>;
-  if (!loan) return <div className="p-4 text-destructive">Loan not found</div>;
+  if (loading) return <div className="text-muted-foreground py-8 text-center">Loading...</div>;
+  if (!loan) return <div className="text-destructive py-8 text-center">Loan not found</div>;
 
   const finalDisplayTransactions = loan.transactions
     .filter(tx => {
@@ -248,7 +249,15 @@ export function LoanDetails() {
     .reverse();
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6 content-pb-fab">
+      <Link
+        to={`/borrowers/${loan.borrower.id}`}
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back to {loan.borrower.name}
+      </Link>
+
       <div className="flex flex-col gap-1 mb-2">
         <div className="flex items-start justify-between">
           <h2 className="text-xl font-bold tracking-tight">{loan.borrower.name}'s Loan</h2>
@@ -261,8 +270,8 @@ export function LoanDetails() {
             </button>
           )}
         </div>
-        <span className="text-sm text-muted-foreground flex items-center gap-1 group relative">
-          <Calendar className="h-4 w-4" /> 
+        <span className="text-sm text-muted-foreground flex flex-wrap items-center gap-1">
+          <Calendar className="h-4 w-4 shrink-0" /> 
           <div>
             Started {dayjs(loan.startDate).format('MMM D, YYYY')} ({loan.termDays != null ? `${loan.termDays}-day term` : `${loan.interestInfo.daysElapsed} days elapsed`})
             {loan.dueDate && ` • Due ${dayjs(loan.dueDate).format('MMM D, YYYY')}`}
@@ -271,14 +280,15 @@ export function LoanDetails() {
           {loan.status !== 'FORECLOSED' && loan.status !== 'CLOSED' && (
             <button 
               onClick={() => setIsDatesModalOpen(true)}
-              className="ml-2 p-1 text-muted-foreground hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
+              className="touch-target ml-1 text-muted-foreground hover:text-primary transition-colors"
               title="Edit Dates"
+              aria-label="Edit dates"
             >
-              <Edit2 className="h-3.5 w-3.5" />
+              <Edit2 className="h-4 w-4" />
             </button>
           )}
         </span>
-        <div className="flex gap-2 text-xs mt-1">
+        <div className="flex flex-wrap gap-2 text-xs mt-1">
           <span className={`px-2 py-0.5 rounded font-medium ${
             loan.status === 'FORECLOSED' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
           }`}>
@@ -293,7 +303,7 @@ export function LoanDetails() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="rounded-xl border bg-card p-4 shadow-sm">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <IndianRupee className="h-4 w-4" />
@@ -308,8 +318,8 @@ export function LoanDetails() {
           </div>
           <div className="text-xl font-bold text-red-500">₹{formatAmount(loan.interestInfo.currentOutstandingInterest)}</div>
         </div>
-        <div className="col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-4 shadow-sm flex flex-col gap-3">
-          <div className="flex items-center justify-between">
+        <div className="sm:col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-4 shadow-sm flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <div className="text-sm text-primary font-medium mb-1">Total Payable (Today)</div>
               <div className="text-3xl font-bold text-primary">₹{loan.interestInfo.totalPayable.toLocaleString()}</div>
@@ -370,7 +380,7 @@ export function LoanDetails() {
         </div>
         
         {/* Date Filter */}
-        <div className="grid grid-cols-2 gap-2 mb-2 p-3 bg-muted/30 rounded-lg border border-border/50">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2 p-3 bg-muted/30 rounded-lg border border-border/50">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">From</label>
             <input 
@@ -417,10 +427,11 @@ export function LoanDetails() {
                       <span>{dayjs(tx.createdAt).format('MMM D, YYYY h:mm A')}</span>
                       {loan.status !== 'FORECLOSED' && loan.status !== 'CLOSED' && (
                         <button 
-                          className="opacity-0 group-hover:opacity-100 hover:text-primary transition-colors flex items-center gap-1"
+                          className="touch-target text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
                           onClick={() => openEditTxModal(tx)}
+                          aria-label="Edit transaction"
                         >
-                          <Edit2 className="h-3 w-3" />
+                          <Edit2 className="h-3.5 w-3.5" />
                         </button>
                       )}
                     </div>
@@ -432,7 +443,7 @@ export function LoanDetails() {
               </div>
               <div className="flex justify-between items-center text-xs bg-muted/40 p-2 rounded-lg border border-border/40">
                 <span className="text-muted-foreground font-medium">Pending After Payment:</span>
-                <div className="flex gap-3 font-semibold text-foreground">
+                <div className="flex flex-col items-end sm:flex-row sm:gap-3 font-semibold text-foreground">
                   <span>Prin: ₹{formatAmount(tx.balanceAfterTx.principal)}</span>
                   <span className={tx.balanceAfterTx.interest > 0 ? "text-red-500" : ""}>
                     Int: ₹{formatAmount(tx.balanceAfterTx.interest)}
@@ -453,7 +464,7 @@ export function LoanDetails() {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Record Transaction">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
               label="Transaction Type *"
               options={[
@@ -507,7 +518,7 @@ export function LoanDetails() {
             error={errors.remarks?.message} 
           />
           
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setIsModalOpen(false)}
@@ -557,7 +568,7 @@ export function LoanDetails() {
             {...registerRate('effectiveDate')} 
             error={rateErrors.effectiveDate?.message as string} 
           />
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setIsRateModalOpen(false)}
@@ -601,7 +612,7 @@ export function LoanDetails() {
             placeholder="e.g. Settled in cash, discount applied..."
           />
 
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setIsForecloseModalOpen(false)}
@@ -633,7 +644,7 @@ export function LoanDetails() {
             {...registerDates('dueDate')} 
             error={datesErrors.dueDate?.message as string} 
           />
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setIsDatesModalOpen(false)}
@@ -684,7 +695,7 @@ export function LoanDetails() {
               </p>
             )}
           </div>
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <button 
               type="button" 
               onClick={() => setEditingTx(null)}

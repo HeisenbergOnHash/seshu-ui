@@ -25,22 +25,24 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 pb-20 backdrop-blur-sm">
-      <div 
-        className="absolute inset-0" 
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4 backdrop-blur-sm">
+      <div
+        className="absolute inset-0"
         onClick={onClose}
       />
-      <div 
+      <div
         className={cn(
-          "relative w-full max-w-lg max-h-[85vh] flex flex-col rounded-xl border bg-card p-4 sm:p-6 shadow-lg animate-in fade-in zoom-in-95",
+          'relative w-full max-w-lg max-h-[85dvh] flex flex-col rounded-t-2xl sm:rounded-xl border bg-card p-4 sm:p-6 shadow-lg animate-in fade-in zoom-in-95 pb-safe',
+          'sm:max-h-[85vh] sm:mb-0',
           className
         )}
       >
         <div className="flex items-center justify-between mb-4 shrink-0">
           <h2 className="text-xl font-bold tracking-tight">{title}</h2>
-          <button 
+          <button
             onClick={onClose}
-            className="rounded-full p-2 hover:bg-muted transition-colors shrink-0"
+            className="touch-target rounded-full hover:bg-muted transition-colors shrink-0"
+            aria-label="Close modal"
           >
             <X className="h-5 w-5" />
           </button>

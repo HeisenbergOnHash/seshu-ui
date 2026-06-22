@@ -21,50 +21,50 @@ export function TopBar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b bg-background px-4">
-        <div className="flex items-center gap-4">
-          <button 
-            className="p-2 -ml-2 text-foreground"
+      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b bg-background px-4 pt-safe">
+        <div className="flex items-center gap-2">
+          <button
+            className="touch-target -ml-2 text-foreground md:hidden"
             onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <h1 className="text-lg font-semibold tracking-tight">FinManager</h1>
+          <h1 className="text-lg font-semibold tracking-tight md:hidden">FinManager</h1>
         </div>
-        
-        <div className="flex items-center gap-2">
-          <button 
+
+        <div className="flex items-center gap-1 md:ml-auto">
+          <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 text-foreground rounded-full hover:bg-muted transition-colors"
+            className="touch-target rounded-full text-foreground hover:bg-muted transition-colors"
+            aria-label="Toggle theme"
           >
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
         </div>
       </header>
 
-      {/* Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity" 
+        <div
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity md:hidden"
           onClick={closeSidebar}
         />
       )}
 
-      {/* Sidebar Drawer */}
-      <div 
+      <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs bg-background border-r shadow-xl transition-transform duration-300 ease-in-out transform",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          'fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs bg-background border-r shadow-xl transition-transform duration-300 ease-in-out transform md:hidden',
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between p-4 border-b pt-safe">
             <h2 className="text-xl font-bold tracking-tight">FinManager</h2>
-            <button onClick={closeSidebar} className="p-2 rounded-full hover:bg-muted transition-colors">
+            <button onClick={closeSidebar} className="touch-target rounded-full hover:bg-muted transition-colors" aria-label="Close menu">
               <X className="h-5 w-5" />
             </button>
           </div>
-          
+
           <div className="p-4 border-b">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -82,18 +82,17 @@ export function TopBar() {
 
           <div className="flex-1 overflow-y-auto py-2">
             <nav className="flex flex-col px-2 space-y-1">
-              <button className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted text-foreground transition-colors w-full text-left">
+              <button className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium hover:bg-muted text-foreground transition-colors w-full text-left">
                 <Settings className="h-4 w-4" />
                 Settings
               </button>
-              {/* Add more sidebar links as needed */}
             </nav>
           </div>
 
-          <div className="p-4 border-t">
-            <button 
+          <div className="p-4 border-t pb-safe">
+            <button
               onClick={handleLogout}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-destructive/10 text-destructive transition-colors w-full text-left"
+              className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium hover:bg-destructive/10 text-destructive transition-colors w-full text-left"
             >
               <LogOut className="h-4 w-4" />
               Logout

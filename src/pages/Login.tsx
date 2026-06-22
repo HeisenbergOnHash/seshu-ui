@@ -22,7 +22,7 @@ export function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-6 shadow-sm">
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Welcome Back</h1>
@@ -33,7 +33,10 @@ export function Login() {
             <label className="text-sm font-medium leading-none text-foreground" htmlFor="phone">Phone Number</label>
             <input
               id="phone"
-              className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              className="flex h-11 md:h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
               placeholder="1234567890"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -45,7 +48,8 @@ export function Login() {
             <input
               id="password"
               type="password"
-              className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+              autoComplete="current-password"
+              className="flex h-11 md:h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -54,7 +58,7 @@ export function Login() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           <button
             type="submit"
-            className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="inline-flex h-11 md:h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-base md:text-sm font-medium text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             Login
           </button>
