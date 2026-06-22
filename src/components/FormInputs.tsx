@@ -55,64 +55,68 @@ export const AmountInput = React.forwardRef<HTMLInputElement, InputProps>(
 AmountInput.displayName = 'AmountInput';
 
 export const DateInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, id, value, onChange, onBlur, name, disabled, min, max }, ref) => {
+  ({ label, error, className, id, onChange, onBlur, name, disabled, min, max, value, defaultValue, ...rest }, ref) => {
     const inputId = id ?? name;
-    const hiddenRef = React.useRef<HTMLInputElement>(null);
-    const isoValue = typeof value === 'string' ? value : '';
-    const display = formatDateDisplay(isoValue);
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
+    const [display, setDisplay] = React.useState(() =>
+      formatDateDisplay(
+        value !== undefined ? String(value) : defaultValue !== undefined ? String(defaultValue) : ''
+      )
+    );
 
-    const openPicker = () => {
-      if (disabled) return;
-      const el = hiddenRef.current;
-      if (!el) return;
-      if (typeof el.showPicker === 'function') {
-        try {
-          el.showPicker();
-        } catch {
-          el.focus();
-        }
-      } else {
-        el.focus();
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setDisplay(formatDateDisplay(String(value)));
       }
+    }, [value]);
+
+    React.useLayoutEffect(() => {
+      const el = inputRef.current;
+      if (el?.value) {
+        setDisplay(formatDateDisplay(el.value));
+      }
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setDisplay(formatDateDisplay(e.target.value));
+      onChange?.(e);
     };
+
+    const valueProps =
+      value !== undefined
+        ? { value: String(value) }
+        : defaultValue !== undefined
+          ? { defaultValue: String(defaultValue) }
+          : {};
 
     return (
       <div className="space-y-1 w-full text-left">
         <label htmlFor={inputId} className="text-sm font-medium leading-none text-foreground">
           {label}
         </label>
-        <div className="relative">
+        <div className="relative h-11 md:h-10 w-full">
           <div
-            role="button"
-            tabIndex={disabled ? -1 : 0}
-            onClick={openPicker}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openPicker();
-              }
-            }}
-            className={`${inputClassName} date-input-display pl-10 text-left ${
+            aria-hidden
+            className={`${inputClassName} date-input-display pointer-events-none absolute inset-0 pl-10 ${
               display ? 'text-foreground' : 'text-muted-foreground'
-            } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${className || ''}`}
+            } ${disabled ? 'opacity-60' : ''} ${className || ''}`}
           >
-            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            {display || 'DD/MM/YYYY'}
+            <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <span className="truncate">{display || 'DD/MM/YYYY'}</span>
           </div>
           <input
-            ref={mergeRefs(ref, hiddenRef)}
+            ref={mergeRefs(ref, inputRef)}
             type="date"
             id={inputId}
             name={name}
-            value={isoValue}
-            onChange={onChange}
+            onChange={handleChange}
             onBlur={onBlur}
             disabled={disabled}
             min={min}
             max={max}
-            className="date-input-native"
-            tabIndex={-1}
-            aria-hidden
+            className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
+            {...valueProps}
+            {...rest}
           />
         </div>
         {error && <p className="text-xs text-destructive">{error}</p>}
