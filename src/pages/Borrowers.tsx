@@ -361,12 +361,14 @@ export function Borrowers() {
           <Input
             label="Phone Number *"
             type="tel"
+            inputMode="numeric"
             {...register('phone')}
             error={errors.phone?.message}
           />
           <Input
             label="Alternate Phone"
             type="tel"
+            inputMode="numeric"
             {...register('altPhone')}
             error={errors.altPhone?.message}
           />

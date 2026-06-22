@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
-import { Input, Select, Textarea } from '../components/FormInputs';
+import { Input, Select, Textarea, AmountInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -484,11 +484,10 @@ export function LoanDetails() {
             />
           </div>
           <div>
-            <Input 
-              label="Amount *" 
-              type="number"
-              {...register('amount', { valueAsNumber: true })} 
-              error={errors.amount?.message} 
+            <AmountInput
+              label="Amount *"
+              {...register('amount', { valueAsNumber: true })}
+              error={errors.amount?.message}
             />
             {txAmount > 0 && (
               <p className="text-xs text-muted-foreground mt-1 italic">
@@ -549,12 +548,11 @@ export function LoanDetails() {
             error={rateErrors.interestRateType?.message as string}
           />
           <div>
-            <Input 
+            <AmountInput
               label={rateType === 'PERCENTAGE' ? 'New Interest Rate (%) *' : 'New Interest Amount (₹) *'}
-              type="number"
               step="0.01"
-              {...registerRate('interestRate', { valueAsNumber: true })} 
-              error={rateErrors.interestRate?.message as string} 
+              {...registerRate('interestRate', { valueAsNumber: true })}
+              error={rateErrors.interestRate?.message as string}
             />
             {rateType === 'FIXED' && rateAmount > 0 && (
               <p className="text-xs text-muted-foreground mt-1 italic">
@@ -683,11 +681,10 @@ export function LoanDetails() {
             error={editTxErrors.date?.message as string} 
           />
           <div>
-            <Input 
-              label="Amount *" 
-              type="number"
-              {...registerEditTx('amount', { valueAsNumber: true })} 
-              error={editTxErrors.amount?.message as string} 
+            <AmountInput
+              label="Amount *"
+              {...registerEditTx('amount', { valueAsNumber: true })}
+              error={editTxErrors.amount?.message as string}
             />
             {editTxAmount > 0 && (
               <p className="text-xs text-muted-foreground mt-1 italic">

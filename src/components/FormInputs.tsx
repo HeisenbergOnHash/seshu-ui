@@ -25,6 +25,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = 'Input';
 
+export const AmountInput = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ inputMode = 'decimal', step = 'any', autoComplete = 'off', ...props }, ref) => (
+    <Input
+      ref={ref}
+      type="text"
+      inputMode={inputMode}
+      step={step}
+      autoComplete={autoComplete}
+      {...props}
+    />
+  )
+);
+AmountInput.displayName = 'AmountInput';
+
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   error?: string;

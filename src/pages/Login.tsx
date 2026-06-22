@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, api } from '../contexts/AuthProvider';
+import { getCookie, setCookie } from '../lib/cookies';
+
+const LAST_PHONE_COOKIE = 'last_phone';
 
 export function Login() {
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(() => getCookie(LAST_PHONE_COOKIE) ?? '');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -14,6 +17,7 @@ export function Login() {
     setError('');
     try {
       const res = await api.post('/auth/login', { phone, password });
+      setCookie(LAST_PHONE_COOKIE, phone.trim());
       login(res.data.token, res.data.user);
       navigate('/');
     } catch (err: any) {

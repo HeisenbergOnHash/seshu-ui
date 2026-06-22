@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
-import { Input, Select } from '../components/FormInputs';
+import { Input, Select, AmountInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -151,11 +151,10 @@ export function BorrowerDetails() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="New Loan">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <Input 
-              label="Principal Amount *" 
-              type="number"
-              {...register('principal', { valueAsNumber: true })} 
-              error={errors.principal?.message} 
+            <AmountInput
+              label="Principal Amount *"
+              {...register('principal', { valueAsNumber: true })}
+              error={errors.principal?.message}
             />
             {principalAmount > 0 && (
               <p className="text-xs text-muted-foreground mt-1 italic">
@@ -174,12 +173,11 @@ export function BorrowerDetails() {
               error={errors.interestRateType?.message}
             />
             <div>
-              <Input 
+              <AmountInput
                 label={rateType === 'PERCENTAGE' ? 'Interest Rate (%) *' : 'Interest Amount (₹) *'}
-                type="number"
                 step="0.01"
-                {...register('interestRate', { valueAsNumber: true })} 
-                error={errors.interestRate?.message} 
+                {...register('interestRate', { valueAsNumber: true })}
+                error={errors.interestRate?.message}
               />
               {rateType === 'FIXED' && rateAmount > 0 && (
                 <p className="text-xs text-muted-foreground mt-1 italic">
