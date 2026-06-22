@@ -4,7 +4,7 @@ import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
 import { ModalFooter } from '../components/ModalFooter';
-import { Input, Select, AmountInput } from '../components/FormInputs';
+import { Select, AmountInput, DateInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -210,15 +210,13 @@ export function BorrowerDetails() {
             error={errors.interestType?.message}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input 
+            <DateInput 
               label="Start Date *" 
-              type="date"
               {...register('startDate')} 
               error={errors.startDate?.message} 
             />
-            <Input 
+            <DateInput 
               label="Due Date (Optional)" 
-              type="date"
               {...register('dueDate')} 
               error={errors.dueDate?.message} 
             />

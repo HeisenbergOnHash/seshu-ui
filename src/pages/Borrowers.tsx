@@ -79,6 +79,13 @@ function getBorrowerStats(loans: Loan[]) {
 const formatAmount = (value: number) =>
   value.toLocaleString('en-IN', { maximumFractionDigits: 0 });
 
+function formatAmountCompact(value: number) {
+  if (value >= 10000000) return `₹${(value / 10000000).toFixed(1)}Cr`;
+  if (value >= 100000) return `₹${(value / 100000).toFixed(1)}L`;
+  if (value >= 1000) return `₹${(value / 1000).toFixed(0)}k`;
+  return `₹${value}`;
+}
+
 function getInitials(name: string) {
   return name
     .split(' ')
@@ -171,41 +178,46 @@ export function Borrowers() {
   }, [filteredBorrowers]);
 
   return (
-    <div className="space-y-4 content-pb-fab">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="text-xl font-bold tracking-tight">Borrowers</h2>
+    <div className="page-shell space-y-3 sm:space-y-4 content-pb-fab">
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <h2 className="text-lg font-bold tracking-tight sm:text-xl truncate">Borrowers</h2>
         <button
           onClick={() => setShowInactive(!showInactive)}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 bg-muted/50 px-3 py-2 rounded-lg border border-border/50 shrink-0 min-h-11"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 bg-muted/50 px-2.5 py-2 sm:px-3 rounded-lg border border-border/50 shrink-0 min-h-10 sm:min-h-11"
         >
           {showInactive ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-          {showInactive ? 'Hide Inactive' : 'Show Inactive'}
+          <span className="hidden min-[380px]:inline">{showInactive ? 'Hide Inactive' : 'Show Inactive'}</span>
+          <span className="min-[380px]:hidden">{showInactive ? 'Hide' : 'Show'}</span>
         </button>
       </div>
 
       {/* Portfolio summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        <div className="rounded-xl border bg-card p-3 shadow-sm">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <User className="h-3.5 w-3.5" />
-            Borrowers
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 min-w-0">
+        <div className="rounded-xl border bg-card p-2 sm:p-3 shadow-sm min-w-0">
+          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">
+            <User className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+            <span className="truncate">Borrowers</span>
           </div>
-          <div className="text-lg font-bold">{portfolioStats.borrowerCount}</div>
+          <div className="text-base sm:text-lg font-bold tabular-nums">{portfolioStats.borrowerCount}</div>
         </div>
-        <div className="rounded-xl border bg-card p-3 shadow-sm">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <FileText className="h-3.5 w-3.5" />
-            Active Loans
+        <div className="rounded-xl border bg-card p-2 sm:p-3 shadow-sm min-w-0">
+          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">
+            <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+            <span className="truncate">Loans</span>
           </div>
-          <div className="text-lg font-bold text-primary">{portfolioStats.activeLoans}</div>
+          <div className="text-base sm:text-lg font-bold text-primary tabular-nums">{portfolioStats.activeLoans}</div>
         </div>
-        <div className="rounded-xl border bg-card p-3 shadow-sm">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <IndianRupee className="h-3.5 w-3.5" />
-            Exposure
+        <div className="rounded-xl border bg-card p-2 sm:p-3 shadow-sm min-w-0">
+          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">
+            <IndianRupee className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+            <span className="truncate">Exposure</span>
           </div>
-          <div className="text-sm font-bold leading-tight">
-            ₹{formatAmount(portfolioStats.totalActivePrincipal)}
+          <div
+            className="text-xs sm:text-sm font-bold leading-tight tabular-nums truncate"
+            title={`₹${formatAmount(portfolioStats.totalActivePrincipal)}`}
+          >
+            <span className="sm:hidden">{formatAmountCompact(portfolioStats.totalActivePrincipal)}</span>
+            <span className="hidden sm:inline">₹{formatAmount(portfolioStats.totalActivePrincipal)}</span>
           </div>
         </div>
       </div>
@@ -233,11 +245,11 @@ export function Borrowers() {
               : null;
 
             return (
-              <Link key={b.id} to={`/borrowers/${b.id}`} className="block group">
-                <div className="rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden list-card hover:border-primary/40 hover:shadow-md transition-all">
-                  <div className="p-4 flex gap-3">
+              <Link key={b.id} to={`/borrowers/${b.id}`} className="block group min-w-0 w-full">
+                <div className="rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden list-card">
+                  <div className="p-3 sm:p-4 flex gap-2.5 sm:gap-3 min-w-0">
                     {/* Avatar */}
-                    <div className={`shrink-0 h-12 w-12 rounded-full flex items-center justify-center text-sm font-bold ${
+                    <div className={`shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
                       b.isActive
                         ? 'bg-primary/10 text-primary'
                         : 'bg-muted text-muted-foreground'
@@ -246,27 +258,27 @@ export function Borrowers() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <h3 className="font-semibold text-base truncate">{b.name}</h3>
-                          <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-0.5">
-                            <Phone className="h-3.5 w-3.5 shrink-0" />
-                            <span>{b.phone}</span>
+                      <div className="flex items-start justify-between gap-1.5 sm:gap-2 min-w-0">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-sm sm:text-base truncate">{b.name}</h3>
+                          <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground mt-0.5 min-w-0">
+                            <Phone className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
+                            <span className="truncate">{b.phone}</span>
                             {b.altPhone && (
-                              <span className="text-xs text-muted-foreground/70">/ {b.altPhone}</span>
+                              <span className="hidden sm:inline text-xs text-muted-foreground/70 shrink-0">/ {b.altPhone}</span>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
                           <button
                             onClick={e => handleToggleStatus(e, b.id, !b.isActive)}
-                            className="touch-target text-muted-foreground hover:text-primary transition-all rounded-md hover:bg-muted"
+                            className="touch-target text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-muted h-9 w-9 sm:h-11 sm:w-11"
                             title={b.isActive ? 'Archive borrower' : 'Restore borrower'}
                             aria-label={b.isActive ? 'Archive borrower' : 'Restore borrower'}
                           >
                             {b.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                           </button>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide ${
+                          <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide ${
                             b.isActive
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                               : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
@@ -293,34 +305,42 @@ export function Borrowers() {
                   </div>
 
                   {/* Loan stats strip */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 divide-x border-t bg-muted/30 text-center">
-                    <div className="px-2 py-2.5">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Loans</div>
-                      <div className="text-sm font-bold mt-0.5">
+                  <div className="grid grid-cols-3 divide-x border-t bg-muted/30 text-center min-w-0">
+                    <div className="px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide text-muted-foreground font-medium truncate">Loans</div>
+                      <div className="text-xs sm:text-sm font-bold mt-0.5 tabular-nums">
                         {stats.activeCount}
-                        <span className="text-muted-foreground font-normal text-xs"> / {stats.totalLoans}</span>
+                        <span className="text-muted-foreground font-normal text-[10px] sm:text-xs"> / {stats.totalLoans}</span>
                       </div>
-                      <div className="text-xs text-muted-foreground">active / total</div>
+                      <div className="text-[10px] sm:text-xs text-muted-foreground truncate">active / total</div>
                     </div>
-                    <div className="px-2 py-2.5">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Principal</div>
-                      <div className="text-sm font-bold mt-0.5 text-primary">
-                        {stats.activePrincipal > 0 ? `₹${formatAmount(stats.activePrincipal)}` : '—'}
+                    <div className="px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide text-muted-foreground font-medium truncate">Principal</div>
+                      <div
+                        className="text-xs sm:text-sm font-bold mt-0.5 text-primary tabular-nums truncate px-0.5"
+                        title={stats.activePrincipal > 0 ? `₹${formatAmount(stats.activePrincipal)}` : undefined}
+                      >
+                        {stats.activePrincipal > 0 ? (
+                          <>
+                            <span className="sm:hidden">{formatAmountCompact(stats.activePrincipal)}</span>
+                            <span className="hidden sm:inline">₹{formatAmount(stats.activePrincipal)}</span>
+                          </>
+                        ) : '—'}
                       </div>
-                      <div className="text-xs text-muted-foreground">active exposure</div>
+                      <div className="text-[10px] sm:text-xs text-muted-foreground truncate">exposure</div>
                     </div>
-                    <div className="px-2 py-2.5">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground font-medium">Rate</div>
-                      <div className="text-xs font-semibold mt-0.5 truncate px-1">
+                    <div className="px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide text-muted-foreground font-medium truncate">Rate</div>
+                      <div className="text-[10px] sm:text-xs font-semibold mt-0.5 truncate px-0.5">
                         {rateLabel ?? '—'}
                       </div>
                       {stats.latestActive?.dueDate && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
                           Due {dayjs(stats.latestActive.dueDate).format('MMM D')}
                         </div>
                       )}
                       {!stats.latestActive?.dueDate && stats.latestActive && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
                           Since {dayjs(stats.latestActive.startDate).format('MMM D')}
                         </div>
                       )}
@@ -328,12 +348,12 @@ export function Borrowers() {
                   </div>
 
                   {b.notes && (
-                    <div className="px-4 py-2 border-t bg-muted/10 text-xs text-muted-foreground italic line-clamp-1">
+                    <div className="px-3 sm:px-4 py-2 border-t bg-muted/10 text-xs text-muted-foreground italic line-clamp-1">
                       {b.notes}
                     </div>
                   )}
 
-                  <div className="px-4 py-2 border-t flex items-center justify-between text-xs text-primary font-medium">
+                  <div className="px-3 sm:px-4 py-2 border-t flex items-center justify-between text-xs text-primary font-medium">
                     <span>View loans & details</span>
                     <ChevronRight className="h-4 w-4" />
                   </div>

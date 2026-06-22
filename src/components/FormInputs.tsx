@@ -1,7 +1,18 @@
 import React from 'react';
+import { Calendar } from 'lucide-react';
+import { formatDateDisplay } from '../lib/dates';
 
 const inputClassName =
   'flex h-11 md:h-10 w-full rounded-xl border border-input/80 bg-background/80 px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:shadow-md';
+
+function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
+  return (node: T | null) => {
+    refs.forEach(ref => {
+      if (typeof ref === 'function') ref(node);
+      else if (ref && typeof ref === 'object') (ref as React.RefObject<T | null>).current = node;
+    });
+  };
+}
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -9,12 +20,16 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, ...props }, ref) => {
+  ({ label, error, className, id, ...props }, ref) => {
+    const inputId = id ?? props.name;
     return (
       <div className="space-y-1 w-full text-left">
-        <label className="text-sm font-medium leading-none text-foreground">{label}</label>
+        <label htmlFor={inputId} className="text-sm font-medium leading-none text-foreground">
+          {label}
+        </label>
         <input
           ref={ref}
+          id={inputId}
           className={`${inputClassName} ${className || ''}`}
           {...props}
         />
@@ -39,6 +54,74 @@ export const AmountInput = React.forwardRef<HTMLInputElement, InputProps>(
 );
 AmountInput.displayName = 'AmountInput';
 
+export const DateInput = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, className, id, value, onChange, onBlur, name, disabled, min, max }, ref) => {
+    const inputId = id ?? name;
+    const hiddenRef = React.useRef<HTMLInputElement>(null);
+    const isoValue = typeof value === 'string' ? value : '';
+    const display = formatDateDisplay(isoValue);
+
+    const openPicker = () => {
+      if (disabled) return;
+      const el = hiddenRef.current;
+      if (!el) return;
+      if (typeof el.showPicker === 'function') {
+        try {
+          el.showPicker();
+        } catch {
+          el.focus();
+        }
+      } else {
+        el.focus();
+      }
+    };
+
+    return (
+      <div className="space-y-1 w-full text-left">
+        <label htmlFor={inputId} className="text-sm font-medium leading-none text-foreground">
+          {label}
+        </label>
+        <div className="relative">
+          <div
+            role="button"
+            tabIndex={disabled ? -1 : 0}
+            onClick={openPicker}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openPicker();
+              }
+            }}
+            className={`${inputClassName} date-input-display pl-10 text-left ${
+              display ? 'text-foreground' : 'text-muted-foreground'
+            } ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${className || ''}`}
+          >
+            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            {display || 'DD/MM/YYYY'}
+          </div>
+          <input
+            ref={mergeRefs(ref, hiddenRef)}
+            type="date"
+            id={inputId}
+            name={name}
+            value={isoValue}
+            onChange={onChange}
+            onBlur={onBlur}
+            disabled={disabled}
+            min={min}
+            max={max}
+            className="date-input-native"
+            tabIndex={-1}
+            aria-hidden
+          />
+        </div>
+        {error && <p className="text-xs text-destructive">{error}</p>}
+      </div>
+    );
+  }
+);
+DateInput.displayName = 'DateInput';
+
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   error?: string;
@@ -55,7 +138,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={`${inputClassName} ${className || ''}`}
           {...props}
         >
-          <option value="" disabled>Select an option</option>
+          <option value="" disabled hidden>
+            Choose…
+          </option>
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

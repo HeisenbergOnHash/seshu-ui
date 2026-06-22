@@ -4,7 +4,7 @@ import { api } from '../contexts/AuthProvider';
 import { FAB } from '../components/FAB';
 import { Modal } from '../components/Modal';
 import { ModalFooter } from '../components/ModalFooter';
-import { Input, Select, Textarea, AmountInput } from '../components/FormInputs';
+import { Input, Select, Textarea, AmountInput, DateInput } from '../components/FormInputs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -304,55 +304,55 @@ export function LoanDetails() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <IndianRupee className="h-4 w-4" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="stat-card">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2">
+            <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
             <span>Out. Principal</span>
           </div>
-          <div className="text-xl font-bold">₹{loan.interestInfo.currentOutstandingPrincipal.toLocaleString()}</div>
+          <div className="text-base sm:text-xl font-bold tabular-nums">₹{loan.interestInfo.currentOutstandingPrincipal.toLocaleString()}</div>
         </div>
-        <div className="rounded-xl border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <Percent className="h-4 w-4 text-red-500" />
+        <div className="stat-card">
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2">
+            <Percent className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-red-500" />
             <span>Out. Interest</span>
           </div>
-          <div className="text-xl font-bold text-red-500">₹{formatAmount(loan.interestInfo.currentOutstandingInterest)}</div>
+          <div className="text-base sm:text-xl font-bold text-red-500 tabular-nums">₹{formatAmount(loan.interestInfo.currentOutstandingInterest)}</div>
         </div>
-        <div className="sm:col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-4 shadow-sm flex flex-col gap-3">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <div className="text-sm text-primary font-medium mb-1">Total Payable (Today)</div>
-              <div className="text-3xl font-bold text-primary">₹{loan.interestInfo.totalPayable.toLocaleString()}</div>
+        <div className="sm:col-span-2 stat-card border-primary/20 bg-primary/5 flex flex-col gap-2.5 sm:gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3">
+            <div className="min-w-0">
+              <div className="text-xs sm:text-sm text-primary font-medium mb-0.5 sm:mb-1">Total Payable (Today)</div>
+              <div className="text-xl sm:text-2xl font-bold text-primary tabular-nums truncate">₹{loan.interestInfo.totalPayable.toLocaleString()}</div>
             </div>
             {loan.status !== 'FORECLOSED' && loan.status !== 'CLOSED' && (
               <button 
                 onClick={() => setIsForecloseModalOpen(true)}
-                className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+                className="shrink-0 px-4 py-2 bg-primary text-primary-foreground text-xs sm:text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors min-h-10 sm:min-h-11"
               >
                 Foreclose
               </button>
             )}
           </div>
           
-          <div className="bg-background/80 rounded-lg p-3 border text-sm mt-1">
-            <div className="flex justify-between items-center text-muted-foreground mb-1">
-              <span>Original Principal:</span>
-              <span className="font-medium text-foreground">₹{loan.principal.toLocaleString()}</span>
+          <div className="bg-background/80 rounded-lg p-2.5 sm:p-3 border text-xs sm:text-sm space-y-1">
+            <div className="flex justify-between items-center gap-2 text-muted-foreground">
+              <span>Original Principal</span>
+              <span className="font-medium text-foreground tabular-nums shrink-0">₹{loan.principal.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center text-muted-foreground mb-1">
-              <span>Total Interest Accrued:</span>
-              <span className="font-medium text-red-500">₹{formatAmount(loan.interestInfo.totalInterestAccrued)}</span>
+            <div className="flex justify-between items-center gap-2 text-muted-foreground">
+              <span>Interest Accrued</span>
+              <span className="font-medium text-red-500 tabular-nums shrink-0">₹{formatAmount(loan.interestInfo.totalInterestAccrued)}</span>
             </div>
             {loan.interestInfo.totalCharges > 0 && (
-              <div className="flex justify-between items-center text-muted-foreground mb-1">
-                <span>Charges:</span>
-                <span className="font-medium text-orange-600">₹{formatAmount(loan.interestInfo.totalCharges)}</span>
+              <div className="flex justify-between items-center gap-2 text-muted-foreground">
+                <span>Charges</span>
+                <span className="font-medium text-orange-600 tabular-nums shrink-0">₹{formatAmount(loan.interestInfo.totalCharges)}</span>
               </div>
             )}
-            <div className="flex justify-between items-center text-muted-foreground pt-1 border-t">
-              <span>Total Interest Collected:</span>
-              <span className="font-medium text-green-600">₹{loan.interestInfo.totalInterestCollected.toLocaleString()}</span>
+            <div className="flex justify-between items-center gap-2 text-muted-foreground pt-1 border-t">
+              <span>Interest Collected</span>
+              <span className="font-medium text-green-600 tabular-nums shrink-0">₹{loan.interestInfo.totalInterestCollected.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -382,24 +382,20 @@ export function LoanDetails() {
         
         {/* Date Filter */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2 p-3 bg-muted/30 rounded-lg border border-border/50">
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">From</label>
-            <input 
-              type="date" 
-              className="w-full bg-background border rounded px-2 py-1 text-sm focus:ring-primary focus:border-primary transition-colors"
-              value={filterStartDate}
-              onChange={(e) => setFilterStartDate(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">To</label>
-            <input 
-              type="date" 
-              className="w-full bg-background border rounded px-2 py-1 text-sm focus:ring-primary focus:border-primary transition-colors"
-              value={filterEndDate}
-              onChange={(e) => setFilterEndDate(e.target.value)}
-            />
-          </div>
+          <DateInput
+            id="tx-filter-start"
+            label="From"
+            value={filterStartDate}
+            max={filterEndDate || undefined}
+            onChange={e => setFilterStartDate(e.target.value)}
+          />
+          <DateInput
+            id="tx-filter-end"
+            label="To"
+            value={filterEndDate}
+            min={filterStartDate || undefined}
+            onChange={e => setFilterEndDate(e.target.value)}
+          />
         </div>
 
         {finalDisplayTransactions.length === 0 ? (
@@ -476,8 +472,8 @@ export function LoanDetails() {
           />
         }
       >
-        <form id="record-transaction-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form id="record-transaction-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <Select
               label="Transaction Type *"
               options={[
@@ -489,9 +485,8 @@ export function LoanDetails() {
               {...register('type')}
               error={errors.type?.message}
             />
-            <Input 
+            <DateInput 
               label="Transaction Date *" 
-              type="date"
               {...register('date')} 
               error={errors.date?.message} 
             />
@@ -568,9 +563,8 @@ export function LoanDetails() {
               </p>
             )}
           </div>
-          <Input 
+          <DateInput 
             label="Effective From Date *" 
-            type="date"
             {...registerRate('effectiveDate')} 
             error={rateErrors.effectiveDate?.message as string} 
           />
@@ -630,15 +624,13 @@ export function LoanDetails() {
         }
       >
         <form id="update-dates-form" onSubmit={handleDatesSubmit(onDatesSubmit)} className="space-y-4">
-          <Input 
+          <DateInput 
             label="Start Date *" 
-            type="date"
             {...registerDates('startDate')} 
             error={datesErrors.startDate?.message as string} 
           />
-          <Input 
+          <DateInput 
             label="Due Date (Optional)" 
-            type="date"
             {...registerDates('dueDate')} 
             error={datesErrors.dueDate?.message as string} 
           />
@@ -670,9 +662,8 @@ export function LoanDetails() {
             {...registerEditTx('type')}
             error={editTxErrors.type?.message as string}
           />
-          <Input 
+          <DateInput 
             label="Transaction Date *" 
-            type="date"
             {...registerEditTx('date')} 
             error={editTxErrors.date?.message as string} 
           />

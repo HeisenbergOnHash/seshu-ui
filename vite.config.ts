@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
           name: 'FinManager App',
           short_name: 'FinManager',
           description: 'Mobile-first loan and interest management app',
-          theme_color: '#ffffff',
+          theme_color: '#0a120c',
           icons: [
             {
               src: 'pwa-192x192.png',

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -25,7 +26,7 @@ export function Modal({ isOpen, onClose, title, children, footer, className }: M
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay">
       <div className="modal-backdrop" onClick={onClose} aria-hidden="true" />
       <div
@@ -36,7 +37,7 @@ export function Modal({ isOpen, onClose, title, children, footer, className }: M
       >
         <div className="modal-handle" aria-hidden="true" />
         <div className="modal-header">
-          <h2 id="modal-title" className="text-lg font-bold tracking-tight">
+          <h2 id="modal-title" className="text-base font-bold tracking-tight sm:text-lg pr-2">
             {title}
           </h2>
           <button
@@ -50,6 +51,7 @@ export function Modal({ isOpen, onClose, title, children, footer, className }: M
         <div className="modal-body">{children}</div>
         {footer && <div className="modal-footer">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -40,7 +40,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="finmanager-theme">
+    <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
