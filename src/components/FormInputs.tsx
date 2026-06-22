@@ -1,18 +1,8 @@
 import React from 'react';
 import { Calendar } from 'lucide-react';
-import { formatDateDisplay } from '../lib/dates';
 
 const inputClassName =
   'flex h-11 md:h-10 w-full rounded-xl border border-input/80 bg-background/80 px-3 py-2 text-base md:text-sm text-foreground shadow-sm placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:shadow-md';
-
-function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
-  return (node: T | null) => {
-    refs.forEach(ref => {
-      if (typeof ref === 'function') ref(node);
-      else if (ref && typeof ref === 'object') (ref as React.RefObject<T | null>).current = node;
-    });
-  };
-}
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -55,68 +45,22 @@ export const AmountInput = React.forwardRef<HTMLInputElement, InputProps>(
 AmountInput.displayName = 'AmountInput';
 
 export const DateInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, id, onChange, onBlur, name, disabled, min, max, value, defaultValue, ...rest }, ref) => {
-    const inputId = id ?? name;
-    const inputRef = React.useRef<HTMLInputElement | null>(null);
-    const [display, setDisplay] = React.useState(() =>
-      formatDateDisplay(
-        value !== undefined ? String(value) : defaultValue !== undefined ? String(defaultValue) : ''
-      )
-    );
-
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setDisplay(formatDateDisplay(String(value)));
-      }
-    }, [value]);
-
-    React.useLayoutEffect(() => {
-      const el = inputRef.current;
-      if (el?.value) {
-        setDisplay(formatDateDisplay(el.value));
-      }
-    }, []);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setDisplay(formatDateDisplay(e.target.value));
-      onChange?.(e);
-    };
-
-    const valueProps =
-      value !== undefined
-        ? { value: String(value) }
-        : defaultValue !== undefined
-          ? { defaultValue: String(defaultValue) }
-          : {};
-
+  ({ label, error, className, id, ...props }, ref) => {
+    const inputId = id ?? props.name;
     return (
       <div className="space-y-1 w-full text-left">
         <label htmlFor={inputId} className="text-sm font-medium leading-none text-foreground">
           {label}
         </label>
-        <div className="relative h-11 md:h-10 w-full">
-          <div
-            aria-hidden
-            className={`${inputClassName} date-input-display pointer-events-none absolute inset-0 pl-10 ${
-              display ? 'text-foreground' : 'text-muted-foreground'
-            } ${disabled ? 'opacity-60' : ''} ${className || ''}`}
-          >
-            <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <span className="truncate">{display || 'DD/MM/YYYY'}</span>
-          </div>
+        <div className="relative">
+          <Calendar className="pointer-events-none absolute left-3 top-1/2 z-[1] h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            ref={mergeRefs(ref, inputRef)}
+            ref={ref}
             type="date"
             id={inputId}
-            name={name}
-            onChange={handleChange}
-            onBlur={onBlur}
-            disabled={disabled}
-            min={min}
-            max={max}
-            className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
-            {...valueProps}
-            {...rest}
+            lang="en-IN"
+            className={`${inputClassName} date-input-field pl-10 ${className || ''}`}
+            {...props}
           />
         </div>
         {error && <p className="text-xs text-destructive">{error}</p>}
