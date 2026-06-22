@@ -1,9 +1,18 @@
-const DEFAULT_API_BASE = '/api';
+const LOCAL_API_BASE = '/api';
 const PRODUCTION_API_URL = 'https://seshu-backend.onrender.com/api';
 
 function normalizeApiUrl(url: string): string {
   const trimmed = url.trim().replace(/\/+$/, '');
   return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+}
+
+function isLocalDevHost(): boolean {
+  if (typeof window === 'undefined') {
+    return import.meta.env.DEV;
+  }
+
+  const host = window.location.hostname;
+  return host === 'localhost' || host === '127.0.0.1';
 }
 
 export function getApiBaseUrl(): string {
@@ -12,9 +21,9 @@ export function getApiBaseUrl(): string {
     return normalizeApiUrl(envUrl);
   }
 
-  if (import.meta.env.PROD) {
-    return PRODUCTION_API_URL;
+  if (isLocalDevHost()) {
+    return LOCAL_API_BASE;
   }
 
-  return DEFAULT_API_BASE;
+  return PRODUCTION_API_URL;
 }
