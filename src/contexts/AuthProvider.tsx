@@ -19,7 +19,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  // Allows a full backend URL via VITE_API_URL while preserving local proxy fallback.
+  baseURL: (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') || '/api',
 });
 
 api.interceptors.request.use((config) => {
