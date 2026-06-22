@@ -5,7 +5,7 @@ Frontend for the Seshu loan management app.
 - **Production:** https://seshu.pages.dev
 - **Backend API:** https://seshu-backend.onrender.com/api
 
-Production avoids CORS by calling same-origin `/api`, which Cloudflare Pages proxies to Render (see [`public/_redirects`](public/_redirects)).
+Production builds call the Render API directly. The backend must allow `https://seshu.pages.dev` via CORS.
 
 ## Run locally
 
@@ -37,12 +37,13 @@ VITE_API_URL=https://seshu-backend.onrender.com/api
 
 ## Deploy (Cloudflare Pages)
 
-Production builds use relative `/api` requests. [`public/_redirects`](public/_redirects) proxies them to Render, so the browser never makes cross-origin API calls.
+Production API URL is set in [`.env.production`](.env.production) and baked into the build at compile time:
 
-```txt
-/api/*  https://seshu-backend.onrender.com/api/:splat  200
-/*      /index.html  200
+```env
+VITE_API_URL=https://seshu-backend.onrender.com/api
 ```
+
+There is also a code fallback in [`src/lib/api-config.ts`](src/lib/api-config.ts) so production always targets Render even if the env var is missing.
 
 Cloudflare Pages settings:
 
@@ -51,7 +52,18 @@ Cloudflare Pages settings:
 | Build command | `npm run build` |
 | Build output directory | `dist` |
 
-Do **not** set `VITE_API_URL` in Cloudflare unless you intentionally want direct cross-origin calls (backend must allow your origin via `CORS_ORIGINS`).
+`VITE_API_URL` in the Cloudflare dashboard is optional (`.env.production` in the repo is the source of truth). If you change it, trigger a **new deployment** — env vars are not applied to existing builds.
+
+SPA routing uses [`public/_redirects`](public/_redirects):
+
+```txt
+/*  /index.html  200
+```
+
+## After deploy
+
+1. Hard-refresh https://seshu.pages.dev or clear the PWA/service worker cache (old JS may be cached).
+2. Login should request `https://seshu-backend.onrender.com/api/auth/login` (not `seshu.pages.dev/api/...`).
 
 ## API URL format
 
@@ -64,4 +76,4 @@ VITE_API_URL=https://seshu-backend.onrender.com/api
 VITE_API_URL=https://seshu-backend.onrender.com
 ```
 
-If unset, the app falls back to `/api` (Vite dev proxy in development).
+In development, if unset, the app falls back to `/api` (Vite dev proxy).
